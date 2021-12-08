@@ -13,7 +13,7 @@ day=""
 
 function sortondate {
     #loop door de picture folder heen
-    for picture in Pictures/*
+    for picture in $picturepath/*
     do echo $picture
     #trim IMG-, Pictures/IMG- en Pictures/ into a date yearmonthday
         if [[ "$picture" =~ ^Pictures/IMG-* ]]
@@ -65,6 +65,7 @@ function sortondate {
         #if month (tolower) equals month
         if [[ "${monthorweek,,}" == "month" ]]
         then
+            pwd
             newdir="/$month-$year"
             #check of er al een folder met deze maandnaam bestaat
             if [ -d $newdir ]
@@ -77,7 +78,7 @@ function sortondate {
                 mkdir $newdir
             fi
             #maak een md5sum van het plaatje
-            md5sum $picture > "$Pictures/sum.md5"
+            md5sum $picture > "$picturepath/sum.md5"
             #kopieer het plaatje naar de nieuwe folder
             cp $picture "$newdir"
             #echo "monthif"
@@ -96,7 +97,7 @@ function sortondate {
                 mkdir $newdir
             fi
             #maakt een md5sum van het plaatje
-            md5sum $picture > "$Pictures/sum.md5"
+            md5sum $picture > "$picturepath/sum.md5"
             #kopieer het plaatje naar de nieuwe folder
             cp $picture "$newdir"
             #echo "weekelif"
@@ -106,11 +107,11 @@ function sortondate {
 
         #vergelijk beide md5sums met elkaar
             #remove het plaatje van de oude locatie
-        if [ !$(md5sum -c "$Pictures/sum.md5" | grep -c "Failed") == "" ]
+        if [ !$(md5sum -c "$picturepath/sum.md5" | grep -c "Failed") == "" ]
         then
             echo "bestand wordt verwijdert"
-            rm -f "$Pictures/sum.md5"
-            rm -f "$Pictures/$picture"
+            rm -f "$picturepath/sum.md5"
+            #rm -f "$picturepath/$picture"
         fi
     done
 }
